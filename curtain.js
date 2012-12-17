@@ -21,6 +21,7 @@
             enableKeys: true,
             easing: 'swing',
             disabled: false,
+            sectionElement: 'section',
             nextSlide: function() {},
             prevSlide: function() {}
         };
@@ -46,8 +47,8 @@
 
             // Cache element
             this.$element = $(this.element);
-            this.$li = $(this.element).find('>li');
-            this.$liLength = this.$li.length;
+            this.$section = $(this.element).find('>' + self.options.sectionElement);
+            this.$numberOfSections = this.$section.length;
             self.$windowHeight = $(window).height();
             self.$elDatas = {};
             self.$document = $(document);
@@ -59,10 +60,10 @@
             $.iPhone = ((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)));
             $.iPad = ((navigator.userAgent.match(/iPad/i)));
             $.iOs4 = (/OS [1-4]_[0-9_]+ like Mac OS X/i.test(navigator.userAgent));
-            
+
             if($.iPhone || $.iPad || $.Android || self.options.disabled){
                 this.options.mobile = true;
-                this.$li.css({position:'relative'});
+                this.$section.css({position:'relative'});
                 this.$element.find('.fixed').css({position:'absolute'});
             }
 
@@ -95,13 +96,13 @@
             // When all image is loaded
             var callbackImageLoaded = function(){
                 self.setDimensions();
-                self.$li.eq(0).addClass('current');
+                self.$section.eq(0).addClass('current');
 
                 self.setCache();
-                
+
                 if(!self.options.mobile){
-                    if(self.$li.eq(1).length)
-                        self.$li.eq(1).nextAll().addClass('hidden');
+                    if(self.$section.eq(1).length)
+                        self.$section.eq(1).nextAll().addClass('hidden');
                 }
 
                 self.setEvents();
@@ -134,7 +135,7 @@
                     if(!self.$current.find('.current-step').length){
                         self.$step.eq(0).addClass('current-step');
                     }
-                        
+
                     var $nextStep = (direction === 'up') ? self.$current.find('.current-step').prev('.step') : self.$current.find('.current-step').next('.step');
 
                     if($nextStep.length) {
@@ -160,13 +161,13 @@
                 }, self.options.scrollSpeed, self.options.easing);
             } else {
                 var index = $("#"+direction).index(),
-                    speed = Math.abs(self.currentIndex-index) * (this.options.scrollSpeed*4) / self.$liLength;
+                    speed = Math.abs(self.currentIndex-index) * (this.options.scrollSpeed*4) / self.$numberOfSections;
 
                 self.scrollEl.animate({
                     scrollTop:self.$elDatas[index]['data-position'] || null
                 }, (speed <= self.options.scrollSpeed) ? self.options.scrollSpeed : speed, this.options.easing);
             }
-            
+
         },
         scrollEvent: function() {
             var self = this,
@@ -178,13 +179,13 @@
 
                 if(self.$current.prev().attr('id'))
                     self.setHash(self.$current.prev().attr('id'));
-                
+
                 self.$current
                     .removeClass('current')
                     .css( (self.webkit) ? {'-webkit-transform': 'translateY(0px) translateZ(0)'} : {marginTop: 0} )
                     .nextAll().addClass('hidden').end()
                     .prev().addClass('current').removeClass('hidden');
-  
+
                 self.setCache();
                 self.options.prevSlide();
 
@@ -211,7 +212,7 @@
                         });
                     }
                 }
-                
+
                 // If there is a step element in the current panel
                 if(self.$stepLength){
                     $.each(self.$step, function(i,el){
@@ -252,7 +253,7 @@
 
                 self.$current.removeClass('current')
                     .addClass('hidden')
-                    .next('li').addClass('current').next('li').removeClass('hidden');
+                    .next(self.sectionElement).addClass('current').next(self.sectionElement).removeClass('hidden');
 
                 self.setCache();
                 self.options.nextSlide();
@@ -308,10 +309,10 @@
                 levelHeight = 0,
                 cover = false,
                 height = null;
-            
+
             self.$windowHeight = self.$window.height();
 
-            this.$li.each(function(index) {
+            this.$section.each(function(index) {
                 var $self = $(this);
                 cover = $self.hasClass('cover');
 
@@ -332,7 +333,7 @@
                     $self.css({minHeight: height, zIndex: 999-index})
                         .attr('data-height',height)
                         .attr('data-position',levelHeight);
-                    
+
                      self.$elDatas[$self.index()] = {
                         'data-height': parseInt(height, 10),
                         'data-position': parseInt(levelHeight, 10)
@@ -365,7 +366,7 @@
                     self.scrollEvent();
                 });
             }
-            
+
             if(self.options.enableKeys) {
                 self.$document.on('keydown', function(e){
                     if(e.keyCode === 38 || e.keyCode === 37) {
@@ -412,7 +413,7 @@
                 $(self.options.curtainLinks).on('click', function(e){
                     e.preventDefault();
                     var href = $(this).attr('href');
-                    
+
                     if(!self.isHashIsOnList(href.substring(1)) && position)
                         return false;
                     var position = self.$elDatas[$(href).index()]['data-position'] || null;
@@ -440,13 +441,13 @@
                var obj = this.$elDatas[key];
                h += obj['data-height'];
             }
-  
+
             this.options.bodyHeight = h;
             $('body').height(h);
         },
         setLinks: function(){
             var self = this;
-            this.$li.each(function() {
+            this.$section.each(function() {
                 var id = $(this).attr('id') || 0;
                 self.options.linksArray.push(id);
             });
@@ -454,7 +455,7 @@
         setHash: function(hash){
             // "HARD FIX"
             el = $('[href=#'+hash+']');
-            el.parent().siblings('li').removeClass('active');
+            el.parent().siblings(this.sectionElement).removeClass('active');
             el.parent().addClass('active');
 
             if(history.pushState) {

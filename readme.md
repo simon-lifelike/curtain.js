@@ -1,30 +1,17 @@
-Curtain.js (The plugin is no longer maintained)
+Curtain.js (maintained fork)
 ========================================
 
 This plugin allows you to create a web page with multiple fixed panels that unroll with an amusing effect. Exactly like a curtain rises.
  
 To navigate, you can use your keyboard instead the scrollbar or mousewheel to navigate into the document. 
-But that's not all, there is more features! For example, you can easily add a fixed element or multiple "steps" element inside a pannel.
-
-Feel free to fork the project on github or ping me on [twitter](http://twitter.com/_victa) for any comments.
-
-<a href='http://www.pledgie.com/campaigns/17333'><img alt='Click here to lend your support to: Curtain.js and make a donation at www.pledgie.com !' src='http://www.pledgie.com/campaigns/17333.png?skin_name=chrome' border='0' /></a>
-
-## Demonstrations
-
-* [Demo website](http://curtain.victorcoulon.fr)
-
-### Site using Curtain.js
-
-* [http://sports.espn.go.com/espn/eticket/story?page=Dock-Ellis](http://sports.espn.go.com/espn/eticket/story?page=Dock-Ellis)
-* [http://womenandtech.com/](http://womenandtech.com/)
+But that's not all, there is more features! For example, you can easily add a fixed element or multiple "steps" element inside a panel.
 
 
 ## Documentation
 
 ### Basic Usage
 
-Usage is very straightforward, simply include curtain.js file in the page, along with jQuery.
+Usage is very straightforward, simply include the curtain.js file in the page. jQuery is the only dependency.
 
 ```html
 <script src="js/libs/jquery.js"></script>  
@@ -47,32 +34,33 @@ Valid options for curtain.js are:
 * ``curtainLinks`` - If you want add a ``<a>`` (or multiple) link to a specific panel simply add a class name to this option. Take a look of the example bellow.(default ``'.curtain-links'``)
 * ``enableKeys`` - Enable/Disable keyboard navigation (default ``true``)
 * ``easing`` -  Change this option to specify the easing function used by jQuery animate calls. (defaults ``swing``) (You muse use jQuery easing plugin or similar to have more easing functions)
+* ``sectionElement`` - The original branch only works with list items as "covers". You can now specify your own element if you like semantic markup. See the following example to get an idea (defaults to "section")
 
 ### Example
 
 Setup the correct element structure:
 
 ```html
-<ol class="curtains">
-    <li class="cover"> 
+<div class="curtains">
+    <section class="cover"> 
         your content
-    </li>
-    <li>
+    </section>
+    <section>
         <div class="fixed"> <!-- if you need a "fixed" content -->
             a fixed content
         </div>
         [...]
-    </li>
-    <li class="cover">
+    </section>
+    <section class="cover">
        [...]
-    </li>
-    <li >
+    </section>
+    <section >
         <ul>
             <li class="step"> ... </li> <!-- Add the class "step" to an element to  -->
             <li class="step"> ... </li> <!-- make a break at this point with keyboard controls  -->
         </ul>
-    </li>
-</ol>
+    </section>
+</div>
 ```
 
 Then, you can launch the plugin:
@@ -85,6 +73,9 @@ $(function () {
 });
 
 ```
+
+Again, if you prefer to use `li`s or some other element for your steps, you'd specify it using the `sectionElement` option. Don't forget to update the CSS as well.
+
 ## Features
 
 ### Add a "next" and "prev" link
@@ -114,23 +105,23 @@ $(function () {
 Simply add an id attribute to your panel:
 
 ```html
-<ol class="curtains">
-    <li id="myfirstpanel" class="cover"> 
+<div class="curtains">
+    <section id="myfirstpanel" class="cover"> 
         your content
-    </li>
+    </section>
     [...]
-</ol>
+</div>
 ```
 
 Then you can add a link anywhere to your first panel like:
 
 ```html
-<ol class="curtains">
+<div class="curtains">
     [...]
-    <li class="cover">
+    <section class="cover">
        <a href="#myfirstpanel" class="curtain-links">Go to first panel</a>
-    </li>
-</ol>
+    </section>
+</div>
 ```
 
 
@@ -163,37 +154,10 @@ $('.curtains').curtains({
 * Firefox
 * Chrome
 * IE8/IE9
-* iOs (iPhone/iPad) __but the curtain effect is disabled__
+* iOS (iPhone/iPad) __but the curtain effect is disabled__
 * Android (Chrome/Opera) __but the curtain effect is disabled__
 
+## See [original project README](https://github.com/Victa/curtain.js/) for original roadmap, credits, and inspirations
 
-## Roadmap
-
-* Remove panels dynamically
-* Better android default browser support
-* scroll horizontally
-
-## Credits
-
-### Author
-[Victor Coulon](http://victorcoulon.fr) or ping me on twitter http://twitter.com/_victa
-
-### Contributors
-
-* [Jordan Jefferson](https://github.com/jordanj77)
-* [Francis Thomas](http://francisthomas.fr/)
-* [John Brown](http://www.thisisjohnbrown.com/)
-
-
-### Inspirations
-
-
-* http://editsquarterly.com/
-* http://www.interviewmagazine.com
-* http://www.dbworks.pro/
-* http://www.deuxhuithuit.com/en/
-* http://www.madebygrave.com/
-* http://www.boston.com/bigpicture/
-
-### Licence
-Licence MIT
+## License
+License MIT

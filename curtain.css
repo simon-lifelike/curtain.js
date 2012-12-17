@@ -9,7 +9,7 @@ html{
     position:relative;
 }
 
-.curtains>li{
+.curtains>section{
     -webkit-transform:translateZ(0);
     background: white;
     position: fixed;
@@ -21,5 +21,5 @@ html{
     overflow: hidden;
     z-index:1;
 }
-.curtains>li.hidden{display:none;}
-.curtains>li:first-child{z-index:2;}
+.curtains>section.hidden{display:none;}
+.curtains>section:first-child{z-index:2;}
