@@ -75,12 +75,10 @@
                 this.$element.find('.fixed').css({position:'absolute'});
             }
 
-            if(this.options.mobile){
-               this.scrollEl =  this.$element;
-            } else if($.browser.mozilla || $.browser.msie) {
-                this.scrollEl = $('html');
-            } else {
+            if(self.webkit || this.options.mobile) {
                 this.scrollEl = $('body');
+            } else {
+                this.scrollEl = $('html');
             }
 
             if(self.options.controls){
@@ -106,11 +104,17 @@
                 self.setDimensions();
                 self.$section.eq(0).addClass('current');
 
+                self.options.allLoaded();
+
                 self.setCache();
 
                 if(!self.options.mobile){
-                    if(self.$section.eq(1).length)
+                    if(self.$section.eq(1).length) {
                         self.$section.eq(1).nextAll().addClass('hidden');
+                    }
+                    self.$element.addClass(self.options.loadClass);
+                } else {
+                    self.$element.addClass(self.options.loadClass).addClass(self.options.mobileClass);
                 }
 
                 self.setEvents();
@@ -185,8 +189,9 @@
                 // Scroll to top
                 self._ignoreHashChange = true;
 
-                if(self.$current.prev().attr('id'))
-                    self.setHash(self.$current.prev().attr('id'));
+                var idx = self.$current.prev().attr('id')
+                if(idx)
+                    self.setHash(idx);
 
                 self.$current
                     .removeClass('current')
@@ -195,7 +200,7 @@
                     .prev().addClass('current').removeClass('hidden');
 
                 self.setCache();
-                self.options.prevSlide();
+                self.options.prevSlide(idx);
 
             } else if(docTop < (self.currentP + self.currentHeight)){
 
@@ -256,15 +261,16 @@
             } else {
                 // Scroll bottom
                 self._ignoreHashChange = true;
-                if(self.$current.next().attr('id'))
-                    self.setHash(self.$current.next().attr('id'));
+                var idx = self.$current.next().attr('id');
+                if(idx)
+                    self.setHash(idx);
 
                 self.$current.removeClass('current')
                     .addClass('hidden')
                     .next(self.sectionElement).addClass('current').next(self.sectionElement).removeClass('hidden');
 
                 self.setCache();
-                self.options.nextSlide();
+                self.options.nextSlide(idx);
             }
 
         },
@@ -277,12 +283,13 @@
                 // Scroll to top
                 self._ignoreHashChange = true;
 
-                if(self.$current.prev().attr('id'))
-                    self.setHash(self.$current.prev().attr('id'));
+                var idx = self.$current.prev().attr('id');
+                if(idx)
+                    self.setHash(idx);
 
                 self.$current.removeClass('current').prev().addClass('current');
                 self.setCache();
-                self.options.prevSlide();
+                self.options.prevSlide(idx);
             } else if(docTop+10 < (self.currentP + self.currentHeight)){
 
                 // If there is a step element in the current panel
@@ -301,12 +308,13 @@
 
                 // Scroll bottom
                 self._ignoreHashChange = true;
-                if(self.$current.next().attr('id'))
-                    self.setHash(self.$current.next().attr('id'));
+                var idx = self.$current.next().attr('id')
+                if(idx)
+                    self.setHash(idx);
 
                 self.$current.removeClass('current').next().addClass('current');
                 self.setCache();
-                self.options.nextSlide();
+                self.options.nextSlide(idx);
             }
 
 
