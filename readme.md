@@ -1,9 +1,9 @@
-Curtain.js (maintained fork)
+Curtain.js (MODIFIED version of maintained? fork)
 ========================================
 
 This plugin allows you to create a web page with multiple fixed panels that unroll with an amusing effect. Exactly like a curtain rises.
- 
-To navigate, you can use your keyboard instead the scrollbar or mousewheel to navigate into the document. 
+
+To navigate, you can use your keyboard instead the scrollbar or mousewheel to navigate into the document.
 But that's not all, there is more features! For example, you can easily add a fixed element or multiple "steps" element inside a panel.
 
 
@@ -14,7 +14,7 @@ But that's not all, there is more features! For example, you can easily add a fi
 Usage is very straightforward, simply include the curtain.js file in the page. jQuery is the only dependency.
 
 ```html
-<script src="js/libs/jquery.js"></script>  
+<script src="js/libs/jquery.js"></script>
 <script src="js/libs/curtain.js"></script>
 ```
 
@@ -42,7 +42,7 @@ Setup the correct element structure:
 
 ```html
 <div class="curtains">
-    <section class="cover"> 
+    <section class="cover">
         your content
     </section>
     <section>
@@ -106,7 +106,7 @@ Simply add an id attribute to your panel:
 
 ```html
 <div class="curtains">
-    <section id="myfirstpanel" class="cover"> 
+    <section id="myfirstpanel" class="cover">
         your content
     </section>
     [...]
