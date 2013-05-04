@@ -7,7 +7,7 @@ This is a modified version of the original Curtain.js. It's not clear yet whethe
 
 Curtain.js is no longer maintained by the original author @Victa (https://github.com/Victa/curtain.js), and was last maintained by @BrettBukowski (https://github.com/BrettBukowski/curtain.js).
 
-I've made some modifications, working to update the script to some contemporary factors (current jQuery, for one). I'll post my modifications here.
+I (@jayf) have made some modifications, working to update the script to some contemporary factors (current jQuery, for one). I'll post my modifications here (https://github.com/jayf/curtain.js).
 
 ----
 
