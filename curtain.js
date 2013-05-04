@@ -5,6 +5,9 @@
 * Version: 2
 * Copyright 2011, Victor Coulon (http://victorcoulon.fr)
 * Released under the MIT Licence
+*
+* MODIFIED BY @jayf of JUXTAPROSE, May 2013
+*
 */
 
 (function ( $, window, document, undefined ) {
@@ -18,12 +21,15 @@
             scrollButtons: {},
             controls: null,
             curtainLinks: '.curtain-links',
+            loadClass: 'curtains-loaded',
+            mobileClass: 'curtains-mobile',
             enableKeys: true,
             easing: 'swing',
             disabled: false,
             sectionElement: 'section',
             nextSlide: function() {},
-            prevSlide: function() {}
+            prevSlide: function() {},
+            allLoaded: function() {}
         };
 
     // The actual plugin constructor
