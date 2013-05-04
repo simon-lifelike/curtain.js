@@ -11,6 +11,7 @@ I (@jayf) have made some modifications, working to update the script to some con
 
 ----
 
+## Original Readme
 
 This plugin allows you to create a web page with multiple fixed panels that unroll with an amusing effect. Exactly like a curtain rises.
 
