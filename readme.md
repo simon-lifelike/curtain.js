@@ -1,6 +1,17 @@
 Curtain.js (MODIFIED version of maintained? fork)
 ========================================
 
+This is a modified version of the original Curtain.js. It's not clear yet whether there is an offically maintained version elsewhere, or whether this modified version will be maintained--still TBD.
+
+## Status
+
+Curtain.js is no longer maintained by the original author @Victa (https://github.com/Victa/curtain.js), and was last maintained by @BrettBukowski (https://github.com/BrettBukowski/curtain.js).
+
+I've made some modifications, working to update the script to some contemporary factors (current jQuery, for one). I'll post my modifications here.
+
+----
+
+
 This plugin allows you to create a web page with multiple fixed panels that unroll with an amusing effect. Exactly like a curtain rises.
 
 To navigate, you can use your keyboard instead the scrollbar or mousewheel to navigate into the document.
