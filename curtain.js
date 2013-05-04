@@ -52,7 +52,7 @@
             var self = this;
 
             // Cache element
-            this.$element = $(this.element);
+            self.$element = $(this.element);
             this.$section = $(this.element).find('>' + self.options.sectionElement);
             this.$numberOfSections = this.$section.length;
             self.$windowHeight = $(window).height();
@@ -60,12 +60,14 @@
             self.$document = $(document);
             self.$window = $(window);
 
+            var ua = navigator.userAgent;
 
-            self.webkit = (navigator.userAgent.indexOf('Chrome') > -1 || navigator.userAgent.indexOf("Safari") > -1);
-            $.Android = (navigator.userAgent.match(/Android/i));
-            $.iPhone = ((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)));
+            self.webkit = (ua.indexOf('Chrome') > -1 || ua.indexOf("Safari") > -1);
+
+            $.Android = (ua.match(/Android/i));
+            $.iPhone = ((ua.match(/iPhone/i)) || (ua.match(/iPod/i)));
             $.iPad = ((navigator.userAgent.match(/iPad/i)));
-            $.iOs4 = (/OS [1-4]_[0-9_]+ like Mac OS X/i.test(navigator.userAgent));
+            $.iOs4 = (/OS [1-4]_[0-9_]+ like Mac OS X/i.test(ua));
 
             if($.iPhone || $.iPad || $.Android || self.options.disabled){
                 this.options.mobile = true;
