@@ -34,8 +34,6 @@
 
     // The actual plugin constructor
     function Plugin( element, options ) {
-        var self = this;
-
         // Public attributes
         this.element = element;
         this.options = $.extend( {}, defaults, options) ;
@@ -49,58 +47,67 @@
 
     Plugin.prototype = {
         init: function () {
-            var self = this;
+            var self = this,
+                ua = navigator.userAgent;
 
             // Cache element
-            self.$element = $(this.element);
-            this.$section = $(this.element).find('>' + self.options.sectionElement);
+            this.$element          = $(this.element);
+            this.$section          = this.$element.find('>' + this.options.sectionElement);
             this.$numberOfSections = this.$section.length;
-            self.$windowHeight = $(window).height();
-            self.$elDatas = {};
-            self.$document = $(document);
-            self.$window = $(window);
+            this.$document         = $(document);
+            this.$window           = $(window);
+            this.$body             = $('body');
+            this.$html             = $('html');
+            this.$elDatas          = {};
+            this.$windowHeight     = this.$window.height();
 
-            var ua = navigator.userAgent;
 
-            self.webkit = (ua.indexOf('Chrome') > -1 || ua.indexOf("Safari") > -1);
-
+            $.Webkit  = (ua.match(/Chrome|Safari/i));
             $.Android = (ua.match(/Android/i));
-            $.iPhone = ((ua.match(/iPhone/i)) || (ua.match(/iPod/i)));
-            $.iPad = ((navigator.userAgent.match(/iPad/i)));
-            $.iOs4 = (/OS [1-4]_[0-9_]+ like Mac OS X/i.test(ua));
+            $.iPhone  = (ua.match(/iPhone|iPod/i));
+            $.iPad    = ((ua.match(/iPad/i)));
+            $.iOs4    = (/OS [1-4]_[0-9_]+ like Mac OS X/i.test(ua));
 
-            if($.iPhone || $.iPad || $.Android || self.options.disabled){
+            if($.iPhone || $.iPad || $.Android || self.options.disabled) {
                 this.options.mobile = true;
-                this.$section.css({position:'relative'});
-                this.$element.find('.fixed').css({position:'absolute'});
+
+                this.$section
+                    .css({position:'relative'});
+
+                this.$element
+                    .find('.fixed')
+                        .css({position:'absolute'});
             }
 
-            if(self.webkit || this.options.mobile) {
-                this.scrollEl = $('body');
+            if($.Webkit || this.options.mobile) {
+                this.scrollEl = this.$body;
             } else {
-                this.scrollEl = $('html');
+                this.scrollEl = this.$html;
             }
 
-            if(self.options.controls){
-                self.options.scrollButtons['up'] =  $(self.options.controls).find('[href="#up"]');
-                self.options.scrollButtons['down'] =  $(self.options.controls).find('[href="#down"]');
+            if(this.options.controls) {
+                this.options.scrollButtons['up'] =  $(self.options.controls).find('[href="#up"]');
+                this.options.scrollButtons['down'] =  $(self.options.controls).find('[href="#down"]');
 
                 if(!$.iOs4 && ($.iPhone || $.iPad)){
-                    self.$element.css({
-                        position:'fixed',
-                        top:0,
-                        left:0,
-                        right:0,
-                        bottom:0,
-                        '-webkit-overflow-scrolling':'touch',
-                        overflow:'auto'
+                    this.$element.css({
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        '-webkit-overflow-scrolling': 'touch',
+                        overflow: 'auto'
                     });
-                    $(self.options.controls).css({position:'absolute'});
+
+                    $(this.options.controls).css({
+                        position: 'absolute'
+                    });
                 }
             }
 
             // When all image is loaded
-            var callbackImageLoaded = function(){
+            var callbackImageLoaded = function() {
                 self.setDimensions();
                 self.$section.eq(0).addClass('current');
 
@@ -110,11 +117,17 @@
 
                 if(!self.options.mobile){
                     if(self.$section.eq(1).length) {
-                        self.$section.eq(1).nextAll().addClass('hidden');
+                        self.$section
+                            .eq(1)
+                                .nextAll()
+                                    .addClass('hidden');
                     }
-                    self.$element.addClass(self.options.loadClass);
+                    self.$element
+                        .addClass(self.options.loadClass);
                 } else {
-                    self.$element.addClass(self.options.loadClass).addClass(self.options.mobileClass);
+                    self.$element
+                        .addClass(self.options.loadClass)
+                        .addClass(self.options.mobileClass);
                 }
 
                 self.setEvents();
@@ -122,117 +135,130 @@
                 self.isHashIsOnList(location.hash.substring(1));
             };
 
-            if(self.$element.find('img').length)
-                self.imageLoaded(callbackImageLoaded);
-            else
+            if(this.$element.find('img').length) {
+                this.imageLoaded(callbackImageLoaded);
+            } else {
                 callbackImageLoaded();
-
+            }
         },
         // Events
         scrollToPosition: function (direction){
             var position = null,
                 self = this;
 
-            if(self.scrollEl.is(':animated')){
-                return false;
-            }
+            if(this.scrollEl.is(':animated')) return false;
 
-            if(direction === 'up' || direction == 'down'){
+            if(direction === 'up' || direction === 'down'){
                 // Keyboard event
                 var $next = (direction === 'up') ? self.$current.prev() : self.$current.next();
 
                 // Step in the current panel ?
-                if(self.$step){
+                if(this.$step){
 
-                    if(!self.$current.find('.current-step').length){
-                        self.$step.eq(0).addClass('current-step');
+                    if(!this.$current.find('.current-step').length){
+                        this.$step.eq(0).addClass('current-step');
                     }
 
-                    var $nextStep = (direction === 'up') ? self.$current.find('.current-step').prev('.step') : self.$current.find('.current-step').next('.step');
+                    var $nextStep = (direction === 'up') ?
+                        this.$current.find('.current-step').prev('.step') :
+                        this.$current.find('.current-step').next('.step');
 
                     if($nextStep.length) {
-                        position = (self.options.mobile) ? $nextStep.position().top + self.$elDatas[self.$current.index()]['data-position'] : $nextStep.position().top + self.$elDatas[self.$current.index()]['data-position'];
+                        position = (this.options.mobile) ? $nextStep.position().top + this.$elDatas[this.$current.index()]['data-position'] : $nextStep.position().top + this.$elDatas[self.$current.index()]['data-position'];
                     }
                 }
 
-                position = position || ((self.$elDatas[$next.index()] === undefined) ? null : self.$elDatas[$next.index()]['data-position']);
+                position = position || ((this.$elDatas[$next.index()] === undefined) ? null : this.$elDatas[$next.index()]['data-position']);
 
                 if(position !== null){
-                    self.scrollEl.animate({
+                    this.scrollEl.animate({
                         scrollTop: position
-                    }, self.options.scrollSpeed, self.options.easing);
+                    }, this.options.scrollSpeed, this.options.easing);
                 }
 
             } else if(direction === 'top'){
-                self.scrollEl.animate({
-                    scrollTop:0
-                }, self.options.scrollSpeed, self.options.easing);
+
+                this.scrollEl.animate({
+                    scrollTop: 0
+                }, this.options.scrollSpeed, this.options.easing);
+
             } else if(direction === 'bottom'){
-                self.scrollEl.animate({
-                    scrollTop:self.options.bodyHeight
-                }, self.options.scrollSpeed, self.options.easing);
+
+                this.scrollEl.animate({
+                    scrollTop: this.options.bodyHeight
+                }, this.options.scrollSpeed, this.options.easing);
+
             } else {
+
                 var index = $("#"+direction).index(),
-                    speed = Math.abs(self.currentIndex-index) * (this.options.scrollSpeed*4) / self.$numberOfSections;
+                    speed = Math.abs(this.currentIndex-index) * (this.options.scrollSpeed*4) / this.$numberOfSections;
 
                 self.scrollEl.animate({
                     scrollTop:self.$elDatas[index]['data-position'] || null
-                }, (speed <= self.options.scrollSpeed) ? self.options.scrollSpeed : speed, this.options.easing);
+                }, (speed <= this.options.scrollSpeed) ? this.options.scrollSpeed : speed, this.options.easing);
             }
 
         },
         scrollEvent: function() {
             var self = this,
-                docTop = self.$document.scrollTop();
+                docTop = this.$document.scrollTop(),
+                offset,
+                idx;
 
-            if(docTop < self.currentP && self.currentIndex > 0){
+            if(docTop < this.currentP && this.currentIndex > 0){
                 // Scroll to top
-                self._ignoreHashChange = true;
+                this._ignoreHashChange = true;
 
                 var idx = self.$current.prev().attr('id')
                 if(idx)
                     self.setHash(idx);
 
-                self.$current
+                this.$current
                     .removeClass('current')
-                    .css( (self.webkit) ? {'-webkit-transform': 'translateY(0px) translateZ(0)'} : {marginTop: 0} )
+                    .css( ($.Webkit) ? {'-webkit-transform': 'translateY(0) translateZ(0)'} : {marginTop: 0} )
                     .nextAll().addClass('hidden').end()
                     .prev().addClass('current').removeClass('hidden');
 
-                self.setCache();
-                self.options.prevSlide(idx);
+                this.setCache();
+                this.options.prevSlide(idx);
 
-            } else if(docTop < (self.currentP + self.currentHeight)){
+            } else if(docTop < (this.currentP + this.currentHeight)){
+
+                offset = (docTop - this.currentP);
 
                 // Animate the current pannel during the scroll
-                if(self.webkit)
-                    self.$current.css({'-webkit-transform': 'translateY('+(-(docTop-self.currentP))+'px) translateZ(0)' });
+                if($.Webkit)
+                    this.$current.css({'-webkit-transform': 'translateY('+(-(offset))+'px) translateZ(0)' });
                 else
-                    self.$current.css({marginTop: -(docTop-self.currentP) });
+                    this.$current.css({marginTop: -(offset) });
 
                 // If there is a fixed element in the current panel
-                if(self.$fixedLength){
-                    var dataTop = parseInt(self.$fixed.attr('data-top'), 10);
+                if(this.$fixedLength){
+                    var dataTop = parseInt(this.$fixed.attr('data-top'), 10);
 
-                    if(docTop + self.$windowHeight >= self.currentP + self.currentHeight){
-                        self.$fixed.css({
+                    if(docTop + this.$windowHeight >= this.currentP + this.currentHeight){
+                        this.$fixed.css({
                             position: 'fixed'
                         });
                     } else {
-                        self.$fixed.css({
+                        this.$fixed.css({
                             position: 'absolute',
-                            marginTop: Math.abs(docTop-self.currentP)
+                            marginTop: Math.abs(offset)
                         });
                     }
                 }
 
                 // If there is a step element in the current panel
-                if(self.$stepLength){
-                    $.each(self.$step, function(i,el){
-                        if(($(el).position().top+self.currentP) <= docTop+5 && $(el).position().top + self.currentP + $(el).height() >= docTop+5){
-                            if(!$(el).hasClass('current-step')){
+                if(this.$stepLength){
+                    $.each(this.$step, function(i, el) {
+                        var $el = $(el);
+
+                        if(($el.position().top + self.currentP) <= docTop+5 &&
+                           $el.position().top + self.currentP + $el.height() >= docTop+5)
+                        {
+                            if(!$el.is('.current-step')){
                                 self.$step.removeClass('current-step');
-                                $(el).addClass('current-step');
+                                $el.addClass('current-step');
                                 return false;
                             }
                         }
@@ -241,64 +267,79 @@
 
 
                 if(self.parallaxBg){
-                    self.$current.css({
-                        'background-position-y': docTop * self.parallaxBg
+                    this.$current.css({
+                        'background-position-y': docTop * this.parallaxBg
                     });
                 }
 
-                if(self.$fade.length){
-                    self.$fade.css({
-                        'opacity': 1-(docTop/ self.$fade.attr('data-fade'))
+                if(this.$fade.length){
+                    this.$fade.css({
+                        'opacity': 1-(docTop/ this.$fade.attr('data-fade'))
                     });
                 }
 
-                if(self.$slowScroll.length){
-                    self.$slowScroll.css({
-                        'margin-top' : (docTop / self.$slowScroll.attr('data-slow-scroll'))
+                if(this.$slowScroll.length){
+                    this.$slowScroll.css({
+                        'margin-top' : (docTop / this.$slowScroll.attr('data-slow-scroll'))
                     });
                 }
 
             } else {
                 // Scroll bottom
-                self._ignoreHashChange = true;
-                var idx = self.$current.next().attr('id');
-                if(idx)
-                    self.setHash(idx);
+                this._ignoreHashChange = true;
 
-                self.$current.removeClass('current')
+                idx = self.$current.next().attr('id');
+
+                if(idx) self.setHash(idx);
+
+                this.$current
+                    .removeClass('current')
                     .addClass('hidden')
-                    .next(self.sectionElement).addClass('current').next(self.sectionElement).removeClass('hidden');
+                    .next(this.sectionElement)
+                        .addClass('current')
+                    .next(this.sectionElement)
+                        .removeClass('hidden');
 
-                self.setCache();
-                self.options.nextSlide(idx);
+                this.setCache();
+                this.options.nextSlide(idx);
             }
 
         },
         scrollMobileEvent: function() {
             var self = this,
-                docTop = self.$element.scrollTop();
+                docTop = self.$element.scrollTop(),
+                idx;
 
-            if(docTop+10 < self.currentP && self.currentIndex > 0){
+            if(docTop+10 < this.currentP && this.currentIndex > 0){
 
                 // Scroll to top
-                self._ignoreHashChange = true;
+                this._ignoreHashChange = true;
 
-                var idx = self.$current.prev().attr('id');
-                if(idx)
-                    self.setHash(idx);
+                idx = this.$current.prev().attr('id');
 
-                self.$current.removeClass('current').prev().addClass('current');
-                self.setCache();
-                self.options.prevSlide(idx);
-            } else if(docTop+10 < (self.currentP + self.currentHeight)){
+                if(idx) this.setHash(idx);
+
+                this.$current
+                    .removeClass('current')
+                    .prev()
+                        .addClass('current');
+
+                this.setCache();
+                this.options.prevSlide(idx);
+
+            } else if(docTop+10 < (this.currentP + this.currentHeight)) {
 
                 // If there is a step element in the current panel
-                if(self.$stepLength){
-                    $.each(self.$step, function(i,el){
-                        if(($(el).position().top+self.currentP) <= docTop && (($(el).position().top+self.currentP) + $(el).outerHeight()) >= docTop){
-                            if(!$(el).hasClass('current-step')){
+                if(this.$stepLength){
+                    $.each(this.$step, function(i,el){
+                        var $el = $(el);
+
+                        if($el.position().top + self.currentP <= docTop &&
+                           $el.position().top + self.currentP + $el.outerHeight() >= docTop)
+                        {
+                            if(!$el.is('.current-step')) {
                                 self.$step.removeClass('current-step');
-                                $(el).addClass('current-step');
+                                $el.addClass('current-step');
                             }
                         }
                     });
@@ -307,14 +348,19 @@
             } else {
 
                 // Scroll bottom
-                self._ignoreHashChange = true;
-                var idx = self.$current.next().attr('id')
-                if(idx)
-                    self.setHash(idx);
+                this._ignoreHashChange = true;
 
-                self.$current.removeClass('current').next().addClass('current');
-                self.setCache();
-                self.options.nextSlide(idx);
+                idx = this.$current.next().attr('id')
+
+                if(idx) this.setHash(idx);
+
+                this.$current
+                    .removeClass('current')
+                    .next()
+                        .addClass('current');
+
+                this.setCache();
+                this.options.nextSlide(idx);
             }
 
 
@@ -326,18 +372,18 @@
                 cover = false,
                 height = null;
 
-            self.$windowHeight = self.$window.height();
+            this.$windowHeight = self.$window.height();
 
             this.$section.each(function(index) {
-                var $self = $(this);
-                cover = $self.hasClass('cover');
+                var $this = $(this);
+                cover = $this.hasClass('cover');
 
                 if(cover){
-                    $self.css({height: self.$windowHeight, zIndex: 999-index})
+                    $this.css({height: self.$windowHeight, zIndex: 999-index})
                         .attr('data-height',self.$windowHeight)
                         .attr('data-position',levelHeight);
 
-                    self.$elDatas[$self.index()] = {
+                    self.$elDatas[$this.index()] = {
                         'data-height': parseInt(self.$windowHeight,10),
                         'data-position': parseInt(levelHeight, 10)
                     };
@@ -345,12 +391,12 @@
                     levelHeight += self.$windowHeight;
 
                 } else{
-                    height = ($self.outerHeight() <= self.$windowHeight) ? self.$windowHeight : $self.outerHeight();
-                    $self.css({minHeight: height, zIndex: 999-index})
+                    height = ($this.outerHeight() <= self.$windowHeight) ? self.$windowHeight : $this.outerHeight();
+                    $this.css({minHeight: height, zIndex: 999-index})
                         .attr('data-height',height)
                         .attr('data-position',levelHeight);
 
-                     self.$elDatas[$self.index()] = {
+                     self.$elDatas[$this.index()] = {
                         'data-height': parseInt(height, 10),
                         'data-position': parseInt(levelHeight, 10)
                     };
@@ -358,33 +404,33 @@
                     levelHeight += height;
                 }
 
-                if($self.find('.fixed').length){
-                    var top = $self.find('.fixed').css('top');
-                    $self.find('.fixed').attr('data-top', top);
+                if($this.find('.fixed').length){
+                    var top = $this.find('.fixed').css('top');
+                    $this.find('.fixed').attr('data-top', top);
                 }
             });
-            if(!this.options.mobile)
-                this.setBodyHeight();
+
+            if(!this.options.mobile) this.setBodyHeight();
         },
         setEvents: function() {
             var self = this;
 
-            $(window).on('resize', function(){
+            this.$window.on('resize', function(){
                 self.setDimensions();
             });
 
-            if(self.options.mobile) {
-                self.$element.on('scroll', function(){
+            if(this.options.mobile) {
+                this.$element.on('scroll', function(){
                     self.scrollMobileEvent();
                 });
             } else {
-                self.$window.on('scroll', function(){
+                this.$window.on('scroll', function(){
                     self.scrollEvent();
                 });
             }
 
-            if(self.options.enableKeys) {
-                self.$document.on('keydown', function(e){
+            if(this.options.enableKeys) {
+                this.$document.on('keydown', function(e){
                     if(e.keyCode === 38 || e.keyCode === 37) {
                         self.scrollToPosition('up');
                         e.preventDefault();
@@ -410,23 +456,23 @@
                 });
             }
 
-            if(self.options.scrollButtons){
-                if(self.options.scrollButtons.up){
-                    self.options.scrollButtons.up.on('click', function(e){
+            if(this.options.scrollButtons){
+                if(this.options.scrollButtons.up){
+                    this.options.scrollButtons.up.on('click', function(e){
                         e.preventDefault();
                         self.scrollToPosition('up');
                     });
                 }
-                if(self.options.scrollButtons.down){
-                    self.options.scrollButtons.down.on('click', function(e){
+                if(this.options.scrollButtons.down){
+                    this.options.scrollButtons.down.on('click', function(e){
                         e.preventDefault();
                         self.scrollToPosition('down');
                     });
                 }
             }
 
-            if(self.options.curtainLinks){
-                $(self.options.curtainLinks).on('click', function(e){
+            if(this.options.curtainLinks){
+                $(this.options.curtainLinks).on('click', function(e){
                     e.preventDefault();
                     var href = $(this).attr('href');
 
@@ -443,7 +489,7 @@
                 });
             }
 
-            self.$window.on("hashchange", function(event){
+            this.$window.on("hashchange", function(event){
                 if(self._ignoreHashChange === false){
                     self.isHashIsOnList(location.hash.substring(1));
                 }
@@ -470,44 +516,49 @@
         },
         setHash: function(hash){
             // "HARD FIX"
-            el = $('[href=#'+hash+']');
-            el.parent().siblings(this.sectionElement).removeClass('active');
-            el.parent().addClass('active');
+            $el = $('[href=#'+hash+']');
+
+            $el.parent()
+                .siblings(this.sectionElement)
+                    .removeClass('active');
+
+            $el.parent()
+                .addClass('active');
 
             if(history.pushState) {
                 history.pushState(null, null, '#'+hash);
-            }
-            else {
+            } else {
                 location.hash = hash;
             }
         },
         setCache: function(){
             var self = this;
-            self.$current = self.$element.find('.current');
-            self.$fixed = self.$current.find('.fixed');
-            self.$fixedLength = self.$fixed.length;
-            self.$step = self.$current.find('.step');
-            self.$stepLength = self.$step.length;
-            self.currentIndex = self.$current.index();
-            self.currentP = self.$elDatas[self.currentIndex]['data-position'];
-            self.currentHeight = self.$elDatas[self.currentIndex]['data-height'];
+            this.$current      = this.$element.find('.current');
+            this.$fixed        = this.$current.find('.fixed');
+            this.$fixedLength  = this.$fixed.length;
+            this.$step         = this.$current.find('.step');
+            this.$stepLength   = this.$step.length;
+            this.currentIndex  = this.$current.index();
+            this.currentP      = this.$elDatas[this.currentIndex]['data-position'];
+            this.currentHeight = this.$elDatas[this.currentIndex]['data-height'];
 
-            self.parallaxBg = self.$current.attr('data-parallax-background');
-            self.$fade = self.$current.find('[data-fade]');
-            self.$slowScroll = self.$current.find('[data-slow-scroll]');
+            this.parallaxBg    = this.$current.attr('data-parallax-background');
+            this.$fade         = this.$current.find('[data-fade]');
+            this.$slowScroll   = this.$current.find('[data-slow-scroll]');
 
         },
         // Utils
         isHashIsOnList: function(hash){
             var self = this;
-            $.each(self.options.linksArray, function(i,val){
+
+            $.each(this.options.linksArray, function(i, val){
                 if(val === hash){
                     self.scrollToPosition(hash);
                     return false;
                 }
             });
         },
-        readyElement: function(el,callback){
+        readyElement: function(el, callback){
           var interval = setInterval(function(){
             if(el.length){
               callback(el.length);

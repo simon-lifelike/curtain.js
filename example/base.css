@@ -91,66 +91,68 @@ article{
 /* Section 1 */
 
 #section-1{
-    background:url(img/eiffel-2.jpg) 50% 0 no-repeat;
+    background:url(img/eiffel-2.jpg) center center no-repeat;
     background-size:cover;
 }
 
-    #section-1 header{
-        color:#FFF;
-        position:absolute;
-        top:30%;
-        left:50%;
-        margin:0 0 0 -350px;
-        width:700px;
-        text-align:center;
-        text-shadow: 0 1px 1px rgba(0, 0, 0, .5);
-        line-height:1.1;
-    }
+#section-1 header{
+    color:#FFF;
+    position:absolute;
+    top:30%;
+    left:50%;
+    margin:0 0 0 -350px;
+    width:700px;
+    text-align:center;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .5);
+    line-height:1.1;
+}
 
-    #section-1 h1{
-        font-size:120px;
-    }
+#section-1 h1{
+    font-size:120px;
+}
 
-    #section-1 h2{
-        text-transform:capitalize;
-        opacity:.75;
-        font-size:48px;
-    }
+#section-1 h2{
+    text-transform:capitalize;
+    opacity:.75;
+    font-size:48px;
+}
 
 /* Section 2 */
 #section-2{
+    background:url(img/news.jpg) center center no-repeat;
+    background-size:cover;
 }
 
 
 /* Section 3 */
 #section-3{
-    
+
 }
-    #section-3 .photos{
-        padding:150px 0;
-        width:620px;
-        margin-left:150px;
-    }
-        #section-3 .photos > :last-child{margin-bottom:0}
+#section-3 .photos{
+    padding:150px 0;
+    width:620px;
+    margin-left:150px;
+}
+#section-3 .photos > :last-child{margin-bottom:0}
 
-        #section-3 .fixed{
-            position: fixed;
-            top: 150px;
-            left: 150px;
-            width: 200px;
-        }
+#section-3 .fixed{
+    position: fixed;
+    top: 150px;
+    left: 150px;
+    width: 200px;
+}
 
-        #section-3 .photos-inner{
-            margin-left:220px;
-            width:400px;
-        }
+#section-3 .photos-inner{
+    margin-left:220px;
+    width:400px;
+}
 
-        #section-3  .photos-inner img{
-            display:block;
-            margin:0 0 4em 0;
-            max-width:100%;
-            background: #fff; 
-            border-radius: 1px; 
-            padding: 14px 14px 63px 14px; 
-            box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 0 rgba(0,0,0,.1); 
-        }
+#section-3  .photos-inner img{
+    display:block;
+    margin:0 0 4em 0;
+    max-width:100%;
+    background: #fff;
+    border-radius: 1px;
+    padding: 14px 14px 63px 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 0 rgba(0,0,0,.1);
+}
